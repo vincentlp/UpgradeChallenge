@@ -75,6 +75,8 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.20" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger-ui:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.24" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.6.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.20" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.7.0" level="project" />

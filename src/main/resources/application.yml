@@ -2,6 +2,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+    format:
+      date: yyyy-MM-dd
   datasource:
     url: jdbc:h2:mem:mydatabase
     username: vincent
