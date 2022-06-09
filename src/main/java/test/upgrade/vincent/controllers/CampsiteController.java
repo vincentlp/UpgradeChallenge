@@ -25,6 +25,7 @@ public class CampsiteController {
     public Campsite getCampsite(@PathVariable String id) {
         return this.campsiteService.getCampsite(id);
     }
+
     @GetMapping("/")
     public Collection<Campsite> getAllCampsites() {
         return this.campsiteService.getAllCampsites();
