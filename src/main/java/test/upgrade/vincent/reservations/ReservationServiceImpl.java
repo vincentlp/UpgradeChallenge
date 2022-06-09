@@ -51,9 +51,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation updateReservation(Reservation reservation) {
-        Reservation updated = this.reservationRepository.save(reservation);
-        this.reservationCache.put(updated.getId(), updated);
-        return updated;
+        Reservation current = this.reservationCache.get(reservation.getId());
+        Reservation update = Reservation.builder()
+                .id(current.getId())
+                .campsiteId(current.getCampsiteId())
+                .userName(current.getUserName())
+                .userEmail(current.getUserEmail())
+                .startDate(reservation.getStartDate())
+                .endDate(reservation.getEndDate())
+                .createdOn(current.getCreatedOn())
+                .updatedOn(LocalDate.now())
+                .build();
+        this.reservationRepository.save(update);
+        this.reservationCache.put(current.getId(), update);
+        return update;
     }
 
     @Override

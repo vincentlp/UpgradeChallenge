@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,8 @@ import test.upgrade.vincent.controllers.models.CreateReservationDto;
 import test.upgrade.vincent.controllers.models.UpdateReservationDto;
 import test.upgrade.vincent.reservations.ReservationService;
 import test.upgrade.vincent.reservations.models.Reservation;
+import test.upgrade.vincent.reservations.models.ReservationAction;
+import test.upgrade.vincent.workers.ReservationActionService;
 
 
 @RestController
@@ -27,9 +28,12 @@ import test.upgrade.vincent.reservations.models.Reservation;
 public class ReservationController {
 
     private ReservationService reservationService;
+    private ReservationActionService actionService;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public ReservationController(@Autowired ReservationService reservationService) {
+    public ReservationController(@Autowired ReservationService reservationService, @Autowired ReservationActionService actionService) {
         this.reservationService = reservationService;
+        this.actionService = actionService;
     }
 
     @GetMapping("/{id}")
@@ -39,23 +43,38 @@ public class ReservationController {
 
     @GetMapping("/")
     public Reservation getReservationByDate(@RequestParam String valueDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return this.reservationService.getReservationByDate(LocalDate.parse(valueDate, formatter));
+        return this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter));
     }
 
     @PostMapping("/")
     Reservation createReservation(@RequestBody CreateReservationDto reservationDto) {
-        throw new UnsupportedOperationException("not implemented yet");
+        Reservation reservationToCreate = Reservation.builder()
+                .campsiteId(reservationDto.getCampsiteId())
+                .userName(reservationDto.getName())
+                .userEmail(reservationDto.getEmail())
+                .startDate(LocalDate.parse(reservationDto.getArrivalDate(), this.formatter))
+                .endDate(LocalDate.parse(reservationDto.getDepartureDate(), this.formatter))
+                .build();
+        return this.actionService.performAction(reservationToCreate, ReservationAction.CREATE);
     }
 
     @PutMapping("/")
     Reservation updateReservation(@RequestBody UpdateReservationDto reservationDto) {
-        throw new UnsupportedOperationException("not implemented yet");
+        Reservation reservationToUpdate = Reservation.builder()
+                .id(reservationDto.getReservationId())
+                .startDate(LocalDate.parse(reservationDto.getArrivalDate(), this.formatter))
+                .endDate(LocalDate.parse(reservationDto.getDepartureDate(), this.formatter))
+                .build();
+        return this.actionService.performAction(reservationToUpdate, ReservationAction.UPDATE);
     }
 
     @DeleteMapping("/")
-    ResponseEntity<Reservation> cancelReservation(@RequestBody CancelReservationDto reservationDto) {
-        throw new UnsupportedOperationException("not implemented yet");
+    Reservation cancelReservation(@RequestBody CancelReservationDto reservationDto) {
+        Reservation reservationToCancel = Reservation.builder()
+                .id(reservationDto.getReservationId())
+                .build();
+
+        return this.actionService.performAction(reservationToCancel, ReservationAction.CANCEL);
     }
 
 }
