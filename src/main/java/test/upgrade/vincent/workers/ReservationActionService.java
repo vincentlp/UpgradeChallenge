@@ -5,5 +5,5 @@ import test.upgrade.vincent.reservations.models.ReservationAction;
 
 public interface ReservationActionService {
 
-    Reservation performAction(Reservation reservation, ReservationAction action);
+    Reservation performAction(Reservation reservation, ReservationAction action) throws Exception;
 }
