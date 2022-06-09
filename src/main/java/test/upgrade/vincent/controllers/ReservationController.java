@@ -52,7 +52,7 @@ public class ReservationController {
     }
 
     @PostMapping("/")
-    ResponseEntity createReservation(@RequestBody CreateReservationDto reservationDto) {
+    public ResponseEntity createReservation(@RequestBody CreateReservationDto reservationDto) {
         try {
             Reservation reservationToCreate = Reservation.builder()
                     .campsiteId(reservationDto.getCampsiteId())
@@ -81,7 +81,7 @@ public class ReservationController {
     }
 
     @PutMapping("/")
-    ResponseEntity updateReservation(@RequestBody UpdateReservationDto reservationDto) {
+    public ResponseEntity updateReservation(@RequestBody UpdateReservationDto reservationDto) {
         try {
             Reservation current = this.reservationService.getReservationById(reservationDto.getReservationId());
             if (current == null)
@@ -105,7 +105,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/")
-    ResponseEntity cancelReservation(@RequestBody CancelReservationDto reservationDto) {
+    public ResponseEntity cancelReservation(@RequestBody CancelReservationDto reservationDto) {
         try {
             Reservation reservationToCancel = Reservation.builder()
                     .id(reservationDto.getReservationId())
