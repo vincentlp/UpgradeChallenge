@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import test.upgrade.vincent.availability.AvailabilityService;
+import test.upgrade.vincent.availabilities.AvailabilityService;
 
 @RestController
 @RequestMapping("/availability")

@@ -1,4 +1,4 @@
-package test.upgrade.vincent.availability;
+package test.upgrade.vincent.availabilities;
 
 import java.time.LocalDate;
 
@@ -24,7 +24,7 @@ public class CacheableAvailability {
 
     @Cacheable(value = "availabilities", key = "#date")
     public boolean isAvailable(LocalDate date) {
-        log.debug("recompute availability for valueDate: {}", date.toString());
+        log.info("recompute availability for valueDate: {}", date.toString());
         Reservation reservation = this.reservationService.getReservationByDate(date);
         return reservation == null;
     }

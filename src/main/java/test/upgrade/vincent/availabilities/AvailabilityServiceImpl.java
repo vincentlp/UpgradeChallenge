@@ -1,4 +1,4 @@
-package test.upgrade.vincent.availability;
+package test.upgrade.vincent.availabilities;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
