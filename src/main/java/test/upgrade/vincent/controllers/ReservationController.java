@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import test.upgrade.vincent.controllers.models.CancelReservationDto;
 import test.upgrade.vincent.controllers.models.CreateReservationDto;
 import test.upgrade.vincent.controllers.models.UpdateReservationDto;
@@ -31,6 +37,7 @@ import test.upgrade.vincent.workers.ReservationActionService;
 @RestController
 @Slf4j
 @RequestMapping("/reservation")
+@Api(value = "ReservationController")
 public class ReservationController {
 
     private ReservationService reservationService;
@@ -42,14 +49,29 @@ public class ReservationController {
         this.actionService = actionService;
     }
 
+    @ApiOperation(value = "Get the reservation by its ID", response = Reservation.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "NOT FOUND"),
+    })
     @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable Long id) {
-        return this.reservationService.getReservationById(id).get();
+    public ResponseEntity getReservationById(@PathVariable Long id) {
+        if (this.reservationService.getReservationById(id).isEmpty())
+            return new ResponseEntity("No reservation found for this ID", HttpStatus.NOT_FOUND);
+        return new ResponseEntity(this.reservationService.getReservationById(id).get(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get the reservation by its date", response = Reservation.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "NOT FOUND"),
+    })
     @GetMapping("/")
-    public Reservation getReservationByDate(@RequestParam String valueDate) {
-        return this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter)).get();
+    public ResponseEntity getReservationByDate(@RequestParam String valueDate) {
+        if (this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter)).isEmpty())
+            return new ResponseEntity("No reservation found on this date", HttpStatus.NOT_FOUND);
+        return new ResponseEntity(this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter)).get(), HttpStatus.OK);
+
     }
 
     @PostMapping("/")
