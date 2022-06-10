@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import test.upgrade.vincent.availabilities.AvailabilityService;
@@ -24,9 +24,12 @@ public class AvailabilityController {
         this.availabilityService = availabilityService;
     }
 
-    @GetMapping("/{startDate}/{endDate}")
-    public List<String> getAvailabilities(@PathVariable String startDate, @PathVariable String endDate) {
+    @GetMapping("/")
+    public List<String> getAvailabilities(@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if (startDate == null) startDate = LocalDate.now().toString();
+        if (endDate == null) endDate = LocalDate.parse(startDate, formatter).plusMonths(1).toString();
+
         return this.availabilityService.getAvailabilities(LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter))
                 .stream().map(x -> x.toString())
                 .collect(Collectors.toList());
