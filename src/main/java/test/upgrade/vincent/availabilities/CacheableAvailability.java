@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import test.upgrade.vincent.reservations.ReservationService;
-import test.upgrade.vincent.reservations.models.Reservation;
 
 @Service
 @Slf4j
@@ -25,8 +24,7 @@ public class CacheableAvailability {
     @Cacheable(value = "availabilities", key = "#date")
     public boolean isAvailable(LocalDate date) {
         log.info("recompute availability for valueDate: {}", date.toString());
-        Reservation reservation = this.reservationService.getReservationByDate(date);
-        return reservation == null;
+        return this.reservationService.getReservationByDate(date).isEmpty();
     }
 
     @CacheEvict(value = "availabilities", key = "#date")

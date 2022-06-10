@@ -27,19 +27,18 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation getReservationById(Long id) {
+    public Optional<Reservation> getReservationById(Long id) {
         if (this.reservationCache.isEmpty()) this.reloadCache();
-        return this.reservationCache.getOrDefault(id, null);
+        return Optional.ofNullable(this.reservationCache.get(id));
     }
 
     @Override
-    public Reservation getReservationByDate(LocalDate valueDate) {
+    public Optional<Reservation> getReservationByDate(LocalDate valueDate) {
         if (this.reservationCache.isEmpty()) this.reloadCache();
-        Optional<Reservation> optionalReservation = this.reservationCache.values().stream()
+        return this.reservationCache.values().stream()
                 .filter(x -> x.getStartDate().compareTo(valueDate) <= 0)
                 .filter(x -> x.getEndDate().compareTo(valueDate) >= 0)
                 .findFirst();
-        return optionalReservation.orElse(null);
     }
 
     @Override

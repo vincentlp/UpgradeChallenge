@@ -2,6 +2,7 @@ package test.upgrade.vincent.controllers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,12 +44,12 @@ public class ReservationController {
 
     @GetMapping("/{id}")
     public Reservation getReservationById(@PathVariable Long id) {
-        return this.reservationService.getReservationById(id);
+        return this.reservationService.getReservationById(id).get();
     }
 
     @GetMapping("/")
     public Reservation getReservationByDate(@RequestParam String valueDate) {
-        return this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter));
+        return this.reservationService.getReservationByDate(LocalDate.parse(valueDate, this.formatter)).get();
     }
 
     @PostMapping("/")
@@ -83,10 +84,10 @@ public class ReservationController {
     @PutMapping("/")
     public ResponseEntity updateReservation(@RequestBody UpdateReservationDto reservationDto) {
         try {
-            Reservation current = this.reservationService.getReservationById(reservationDto.getReservationId());
-            if (current == null)
+            Optional<Reservation> current = this.reservationService.getReservationById(reservationDto.getReservationId());
+            if (!current.isPresent())
                 return new ResponseEntity("The reservation does not exist, impossible to update", HttpStatus.BAD_REQUEST);
-            if (current.getEndDate().compareTo(LocalDate.now()) > 0)
+            if (current.get().getEndDate().compareTo(LocalDate.now()) > 0)
                 return new ResponseEntity("The reservation is already terminated, impossible to update", HttpStatus.BAD_REQUEST);
 
 

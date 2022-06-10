@@ -91,7 +91,7 @@ public class ReservationActionServiceImpl implements ReservationActionService {
             }
         }
 
-        Reservation current = this.reservationService.getReservationById(reservation.getId());
+        Reservation current = this.reservationService.getReservationById(reservation.getId()).get();
         reservation = this.reservationService.updateReservation(reservation);
 
         for (LocalDate date = current.getStartDate(); date.isBefore(current.getEndDate().plusDays(1)); date = date.plusDays(1)) {
@@ -112,7 +112,7 @@ public class ReservationActionServiceImpl implements ReservationActionService {
      */
     private Reservation performCancel(Reservation reservation) {
 
-        Reservation current = this.reservationService.getReservationById(reservation.getId());
+        Reservation current = this.reservationService.getReservationById(reservation.getId()).get();
         for (LocalDate date = current.getStartDate(); date.isBefore(current.getEndDate().plusDays(1)); date = date.plusDays(1)) {
             this.cacheAvailability.evictAvailability(date);
         }
