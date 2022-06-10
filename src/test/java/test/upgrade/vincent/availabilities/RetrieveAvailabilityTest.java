@@ -20,7 +20,6 @@ import test.upgrade.vincent.reservations.repositories.ReservationRepository;
 @SpringBootTest
 public class RetrieveAvailabilityTest {
 
-
     @Autowired
     private AvailabilityController availabilityController;
 

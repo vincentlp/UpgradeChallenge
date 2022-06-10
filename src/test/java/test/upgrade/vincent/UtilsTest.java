@@ -28,4 +28,5 @@ public final class UtilsTest {
                 .endDate(departureDate)
                 .build();
     }
+
 }

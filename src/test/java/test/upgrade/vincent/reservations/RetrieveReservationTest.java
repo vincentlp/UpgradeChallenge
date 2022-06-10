@@ -4,6 +4,7 @@ package test.upgrade.vincent.reservations;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -45,31 +46,31 @@ public class RetrieveReservationTest {
 
     @Test
     public void when_default_reservation_is_created_return_reservation() {
-        Reservation reservation = reservationService.getReservationById(defaultReservation.getId());
-        assertThat(reservation).isEqualTo(defaultReservation);
+        Optional<Reservation> reservation = reservationService.getReservationById(defaultReservation.getId());
+        assertThat(reservation.get()).isEqualTo(defaultReservation);
     }
 
     @Test
     public void when_retrieve_wrong_reservation_id_return_null() {
-        Reservation reservation = reservationService.getReservationById(0L);
-        assertThat(reservation).isNull();
+        Optional<Reservation> reservation = reservationService.getReservationById(0L);
+        assertThat(reservation.isEmpty()).isTrue();
     }
 
     @Test
     public void when_retrieve_reservation_by_arrival_date_return_reservation() {
-        Reservation reservation = reservationService.getReservationByDate(defaultReservation.getStartDate());
-        assertThat(reservation).isEqualTo(defaultReservation);
+        Optional<Reservation> reservation = reservationService.getReservationByDate(defaultReservation.getStartDate());
+        assertThat(reservation.get()).isEqualTo(defaultReservation);
     }
 
     @Test
     public void when_retrieve_reservation_by_departure_date_return_reservation() {
-        Reservation reservation = reservationService.getReservationByDate(defaultReservation.getEndDate());
-        assertThat(reservation).isEqualTo(defaultReservation);
+        Optional<Reservation> reservation = reservationService.getReservationByDate(defaultReservation.getEndDate());
+        assertThat(reservation.get()).isEqualTo(defaultReservation);
     }
 
     @Test
     public void when_retrieve_reservation_by_in_between_date_return_reservation() {
-        Reservation reservation = reservationService.getReservationByDate(defaultReservation.getStartDate().plusDays(1));
-        assertThat(reservation).isEqualTo(defaultReservation);
+        Optional<Reservation> reservation = reservationService.getReservationByDate(defaultReservation.getStartDate().plusDays(1));
+        assertThat(reservation.get()).isEqualTo(defaultReservation);
     }
 }
